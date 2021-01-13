@@ -40,3 +40,28 @@ hand set.
 
 For the Raspberry Pi, clone the https://github.com/ninjablocks/433Utils project to
 compile a sniffer tool and transmission commands.
+
+## Changes in this fork 
+
+This fork is jackjansen/rc-switch. It adds support for the ELRO FA500 Flamingo series.
+
+The remote (FA500R) sends multiple codes on every button press. Stock rc-switch
+can decode the last 2 codes, but unfortunately these are _not_ the codes that the
+switches (FA500S) react to: these react to the first code.
+
+This fork add support for that style of code.
+
+Information comes from:
+
+- <https://gist.github.com/probonopd/331674026839b96cd8d7> had the basics of the
+  protocol (sync 1 high 15 low, 28 bits of "usual" 1+3/3+1 ).
+- <https://forum.arduino.cc/index.php?topic=201771.0> is the same info in different
+  form. Also notices that successive presses of the same button sends 4 different
+  codes. The 4 codes are _completely_ different. But: this thread has a reference to the next
+  two sites.
+- <https://forum.fhem.de/index.php/topic,36399.60.html> is about the Home Easy HE800S
+  but apparently these use the same  code. Turns out the switches indeed send a 
+  rolling code sequence number (0-3), and the whole packet is encrypted. 
+- <https://github.com/windkh/flamingoswitch> has an implementation of the encrypt
+  and decrypt routines. Not added here, because the rc-switch code structure
+  does not make it easy.
